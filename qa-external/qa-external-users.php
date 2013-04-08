@@ -168,6 +168,12 @@
 		return preg_replace("/^.*\-/","",$username);
 	}
 
+	function my_db_connection() {
+		$my_db=mysql_connect(QA_FINAL_MYSQL_HOSTNAME, QA_FINAL_MYSQL_USERNAME, QA_FINAL_MYSQL_PASSWORD, true);
+		mysql_select_db(MY_MYSQL_DATABASE, $my_db);
+		return $my_db;
+	}
+
 	function qa_get_logged_in_user()
 /*
 	===========================================================================
@@ -211,12 +217,12 @@
 			$a = explode(",",$_COOKIE['login_user_token']);
 			$userid = str_replace("[","",$a[1]);
 
-			$qa_db_connection=qa_db_connection();
+			$my_db_connection=my_db_connection();
 
 			$result=mysql_fetch_assoc(
 				mysql_query(
-					"SELECT * FROM users WHERE id='".mysql_real_escape_string($userid, $qa_db_connection)."'",
-					$qa_db_connection
+					"SELECT * FROM users WHERE id='".mysql_real_escape_string($userid, $my_db_connection)."'",
+					$my_db_connection
 				)
 			);
 
@@ -243,12 +249,12 @@
 		if ($_SESSION['is_logged_in']) {
 			$userid=$_SESSION['logged_in_userid'];
 
-			$qa_db_connection=qa_db_connection();
+			$my_db_connection=qa_db_connection();
 
 			$result=mysql_fetch_assoc(
 				mysql_query(
-					"SELECT email FROM users WHERE userid='".mysql_real_escape_string($userid, $qa_db_connection)."'",
-					$qa_db_connection
+					"SELECT email FROM users WHERE userid='".mysql_real_escape_string($userid, $my_db_connection)."'",
+					$my_db_connection
 				)
 			);
 
@@ -274,13 +280,13 @@
 		* Your database has a users table that contains usernames, emails and a flag for admin privileges
 
 		if ($_COOKIE['sessionid']) {
-			$qa_db_connection=qa_db_connection();
+			$my_db_connection=qa_db_connection();
 
 			$result=mysql_fetch_assoc(
 				mysql_query(
 					"SELECT userid, username, email, admin_flag FROM users WHERE userid=".
-					"(SELECT userid FROM sessions WHERE sessionid='".mysql_real_escape_string($_COOKIE['session_id'], $qa_db_connection)."')",
-					$qa_db_connection
+					"(SELECT userid FROM sessions WHERE sessionid='".mysql_real_escape_string($_COOKIE['session_id'], $my_db_connection)."')",
+					$my_db_connection
 				)
 			);
 
@@ -323,12 +329,12 @@
 		* Your database is shared with the Q2A site
 		* Your database has a users table that contains emails
 	 */
-		$qa_db_connection=qa_db_connection();
+		$my_db_connection=my_db_connection();
 
 		$result=mysql_fetch_assoc(
 			mysql_query(
-				"SELECT email FROM users WHERE id='".mysql_real_escape_string($userid, $qa_db_connection)."'",
-				$qa_db_connection
+				"SELECT email FROM users WHERE id='".mysql_real_escape_string($userid, $my_db_connection)."'",
+				$my_db_connection
 			)
 		);
 
@@ -387,15 +393,15 @@
 		$publictouserid=array();
 
 		if (count($publicusernames)) {
-			$qa_db_connection=qa_db_connection();
+			$my_db_connection=my_db_connection();
 
 			$escapeduserids=array();
 			foreach ($publicusernames as $publicusername)
-				$escapeduserids[]="'".mysql_real_escape_string(get_userid_from_publicusername($publicusername), $qa_db_connection)."'";
+				$escapeduserids[]="'".mysql_real_escape_string(get_userid_from_publicusername($publicusername), $my_db_connection)."'";
 
 			$results=mysql_query(
 				'SELECT email, id FROM users WHERE id IN ('.implode(',', $escapeduserids).')',
-				$qa_db_connection
+				$my_db_connection
 			);
 
 			while ($result=mysql_fetch_assoc($results))
@@ -455,15 +461,15 @@
 		$useridtopublic=array();
 
 		if (count($userids)) {
-			$qa_db_connection=qa_db_connection();
+			$my_db_connection=my_db_connection();
 
 			$escapeduserids=array();
 			foreach ($userids as $userid)
-				$escapeduserids[]="'".mysql_real_escape_string($userid, $qa_db_connection)."'";
+				$escapeduserids[]="'".mysql_real_escape_string($userid, $my_db_connection)."'";
 
 			$results=mysql_query(
 				'SELECT email, id FROM users WHERE id IN ('.implode(',', $escapeduserids).')',
-				$qa_db_connection
+				$my_db_connection
 			);
 
 			while ($result=mysql_fetch_assoc($results))
