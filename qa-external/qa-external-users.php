@@ -203,23 +203,13 @@
 	//	Until you edit this function, nobody is ever logged in
 	
 		//return null;
-		if ( is_null($_COOKIE['_codelearn-playground_session']) ) 
-			return null;
 
-		$ch = curl_init("http://localhost/users/info/".$_COOKIE['_codelearn-playground_session']);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-		$data = curl_exec($ch);
-		curl_close($ch);
-
-		$json = json_decode($data);
-		#var_dump($json);
-		if (is_null($json->{'user_id'})) {
+		if ( is_null($_COOKIE['login_user_token']) ) {
 			return null;
 		}
 		else {
-			#echo "user id - ".$json->{'user_id'};
-			$userid=$json->{'user_id'};
+			$a = explode(",",$_COOKIE['login_user_token']);
+			$userid = str_replace("[","",$a[1]);
 
 			$qa_db_connection=qa_db_connection();
 
@@ -332,7 +322,7 @@
 
 		* Your database is shared with the Q2A site
 		* Your database has a users table that contains emails
-	*/
+	 */
 		$qa_db_connection=qa_db_connection();
 
 		$result=mysql_fetch_assoc(
@@ -346,7 +336,7 @@
 			return $result['email'];
 
 		return null;
-	 
+
 
 	}
 
@@ -372,7 +362,7 @@
 
 		//	Until you edit this function, always return null
 
-	//	return null;
+		//	return null;
 
 	/*
 		Example 1 - suitable if:
@@ -393,7 +383,7 @@
 		* You use numerical user identifiers
 		* Your database is shared with the Q2A site
 		* Your database has a users table that contains usernames
-	*/
+	 */
 		$publictouserid=array();
 
 		if (count($publicusernames)) {
@@ -413,7 +403,7 @@
 		}
 
 		return $publictouserid;
-	 
+
 
 	}
 
@@ -440,7 +430,7 @@
 
 		//	Until you edit this function, always return null
 
-	//	return null;
+		//	return null;
 
 	/*
 		Example 1 - suitable if:
@@ -461,7 +451,7 @@
 		* You use numerical user identifiers
 		* Your database is shared with the Q2A site
 		* Your database has a users table that contains usernames
-    */
+	 */
 		$useridtopublic=array();
 
 		if (count($userids)) {
@@ -481,7 +471,7 @@
 		}
 
 		return $useridtopublic;
-	 
+
 
 	}
 

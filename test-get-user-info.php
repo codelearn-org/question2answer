@@ -1,21 +1,11 @@
 <?php
 
-session_start();
-#$_SESSION['temp'] = "Value";
-
-$ch = curl_init("http://localhost/users/info/".$_COOKIE['_codelearn-playground_session']);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-
-$data = curl_exec($ch);
-$json = json_decode($data);
-#var_dump($json);
-if (is_null($json->{'user_id'})) {
-	echo "user not signed in ".$_SESSION['temp'];
+if (is_null($_COOKIE['login_user_token']) ) {
+	echo "user not signed in";
 }
 else {
-	echo "user id - ".$json->{'user_id'};
+	$a = explode(",",$_COOKIE['login_user_token']);
+	echo "user id - ".str_replace("[","",$a[1]);
 }
-curl_close($ch);
 
 ?>
