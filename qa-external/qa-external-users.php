@@ -108,12 +108,12 @@
 
 	//	Until you edit this function, don't show login, register or logout links
 
-		return array(
+/*		return array(
 			'login' => null,
 			'register' => null,
 			'logout' => null
 		);
-
+ */
 	/*
 		Example 1 - using absolute URLs, suitable if:
 		
@@ -137,13 +137,13 @@
 		* Your login page:     http://www.mysite.com/login.php
 		* Your register page:  http://www.mysite.com/register.php
 		* Your logout page:    http://www.mysite.com/logout.php
-	
+	*/	
 		return array(
-			'login' => $relative_url_prefix.'../login.php',
-			'register' => $relative_url_prefix.'../register.php',
-			'logout' => $relative_url_prefix.'../logout.php',
+			'login' => $relative_url_prefix.'../users/sign_in',
+			'register' => $relative_url_prefix.'../users/sign_in',
+			'logout' => $relative_url_prefix.'../users/sign_out',
 		);
-	*/
+
 		
 	/*
 		Example 3 - using relative URLs, and implementing $redirect_back_to_url
@@ -161,6 +161,12 @@
 
 	}
 	
+	function get_publicusername($email, $id) {
+		return preg_replace("/@.*$/","",$email)."-".$id;
+	}	
+	function get_userid_from_publicusername($username) {
+		return preg_replace("/^.*\-/","",$username);
+	}
 
 	function qa_get_logged_in_user()
 /*
@@ -227,7 +233,7 @@
 			if (is_array($result))
 				return array(
 					'userid' => $userid,
-					'publicusername' => $result['email'],
+					'publicusername' => get_publicusername($result['email'],$userid),
 					'email' => $result['email'],
 					'level' => ($result['email']=='test@test.com') ? QA_USER_LEVEL_ADMIN : QA_USER_LEVEL_BASIC
 				);
@@ -320,19 +326,18 @@
 
 		//	Until you edit this function, always return null
 
-		return null;
 
 	/*
 		Example 1 - suitable if:
 
 		* Your database is shared with the Q2A site
 		* Your database has a users table that contains emails
-
+	*/
 		$qa_db_connection=qa_db_connection();
 
 		$result=mysql_fetch_assoc(
 			mysql_query(
-				"SELECT email FROM users WHERE userid='".mysql_real_escape_string($userid, $qa_db_connection)."'",
+				"SELECT email FROM users WHERE id='".mysql_real_escape_string($userid, $qa_db_connection)."'",
 				$qa_db_connection
 			)
 		);
@@ -341,7 +346,7 @@
 			return $result['email'];
 
 		return null;
-	 */
+	 
 
 	}
 
@@ -367,7 +372,7 @@
 
 		//	Until you edit this function, always return null
 
-		return null;
+	//	return null;
 
 	/*
 		Example 1 - suitable if:
@@ -388,27 +393,27 @@
 		* You use numerical user identifiers
 		* Your database is shared with the Q2A site
 		* Your database has a users table that contains usernames
-
+	*/
 		$publictouserid=array();
 
 		if (count($publicusernames)) {
 			$qa_db_connection=qa_db_connection();
 
-			$escapedusernames=array();
+			$escapeduserids=array();
 			foreach ($publicusernames as $publicusername)
-				$escapedusernames[]="'".mysql_real_escape_string($publicusername, $qa_db_connection)."'";
+				$escapeduserids[]="'".mysql_real_escape_string(get_userid_from_publicusername($publicusername), $qa_db_connection)."'";
 
 			$results=mysql_query(
-				'SELECT username, userid FROM users WHERE username IN ('.implode(',', $escapedusernames).')',
+				'SELECT email, id FROM users WHERE id IN ('.implode(',', $escapeduserids).')',
 				$qa_db_connection
 			);
 
 			while ($result=mysql_fetch_assoc($results))
-				$publictouserid[$result['username']]=$result['userid'];
+				$publictouserid[get_publicusername($result['email'],$result['id'])]=$result['id'];
 		}
 
 		return $publictouserid;
-	 */
+	 
 
 	}
 
@@ -435,7 +440,7 @@
 
 		//	Until you edit this function, always return null
 
-		return null;
+	//	return null;
 
 	/*
 		Example 1 - suitable if:
@@ -456,7 +461,7 @@
 		* You use numerical user identifiers
 		* Your database is shared with the Q2A site
 		* Your database has a users table that contains usernames
-
+    */
 		$useridtopublic=array();
 
 		if (count($userids)) {
@@ -467,16 +472,16 @@
 				$escapeduserids[]="'".mysql_real_escape_string($userid, $qa_db_connection)."'";
 
 			$results=mysql_query(
-				'SELECT username, userid FROM users WHERE userid IN ('.implode(',', $escapeduserids).')',
+				'SELECT email, id FROM users WHERE id IN ('.implode(',', $escapeduserids).')',
 				$qa_db_connection
 			);
 
 			while ($result=mysql_fetch_assoc($results))
-				$useridtopublic[$result['userid']]=$result['username'];
+				$useridtopublic[$result['id']]=get_publicusername($result['email'],$result['id']);
 		}
 
 		return $useridtopublic;
-	 */
+	 
 
 	}
 
