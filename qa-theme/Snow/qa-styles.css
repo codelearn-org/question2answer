@@ -32,6 +32,25 @@
 	Theme License: GPLv2
 */
 
+@font-face
+{
+	font-family: proximanova;
+	src: url('shah-design/fonts/ProximaNova-Regular.otf');
+}
+
+@font-face {
+	font-family: proximanova;
+	src: url('shah-design/fonts/ProximaNova-Light.otf');
+	font-weight:100;
+}
+
+body, *
+{
+	margin:0px;
+	padding:0px;
+	font-family: proximanova, 'Open Sans', sans-serif !important;
+}
+
     
 /*---[ Start: global css ]---*/
 .clearfix:after,
