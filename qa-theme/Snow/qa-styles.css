@@ -278,9 +278,10 @@ p {
 #qa-login-bar{
     background:#ddd;
     margin:0;
-	height:30px;
+	height:40px;
     border-bottom:1px solid #aaa;
 	box-shadow:0 0 10px 0 rgba(0,0,0,0.15);
+	padding-top: 5px;
 }
 #qa-login-group{
 	width:980px;
@@ -359,7 +360,7 @@ p {
 input[type="submit"].qa-search-button{
 	width:26px;
 	height:26px;
-	margin:0 0 0 -3px;
+	margin:0 0 10px -3px;
 	padding:0;
 	text-indent:-9999px;
 	background:url(images/search.png);
