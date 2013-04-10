@@ -85,6 +85,7 @@
     
 		function body_header() // adds login bar, user navigation and search at top of page in place of custom header content
 		{
+			include ('_header_links.html');
 			$this->output('<div id="qa-login-bar"><div id="qa-login-group">');
 			$this->nav_user_search();
             $this->output('</div></div>');
@@ -151,6 +152,7 @@
 			$this->output('<div class="qa-footer-bottom-group">');
 			qa_html_theme_base::footer();
 			$this->output('</DIV> <!-- END footer-bottom-group -->', '');
+			include('_footer.html');
         }
 		
 		function attribution()
@@ -163,7 +165,7 @@
 
 			qa_html_theme_base::attribution();
 		}
-		
+
 	}
 	 
 
