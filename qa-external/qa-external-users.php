@@ -162,7 +162,12 @@
 	}
 	
 	function get_publicusername($email, $id) {
-		return preg_replace("/@.*$/","",$email)."-".$id;
+		if ( $email == "test@test.com" ) {
+			return "admin";
+		}
+		else {
+			return preg_replace("/@.*$/","",$email)."-".$id;
+		}
 	}	
 	function get_userid_from_publicusername($username) {
 		return preg_replace("/^.*\-/","",$username);
