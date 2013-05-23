@@ -31,7 +31,9 @@
 	Theme Author URI: http://www.q2amarket.com/
 	Theme License: GPLv2
 */
-
+.qa-vote-buttons input[type="submit"] {
+	width:inherit;
+}
 @font-face
 {
 	font-family: proximanova;
